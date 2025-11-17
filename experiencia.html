@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Landing Page (Wireframe + Mockup)</title>
+    <!-- Carga de Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Chart.js y el plugin de etiquetas --><script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    
+    <!-- Configuración de la fuente Inter (común en dashboards) --><script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        /* Estilo para que las fuentes se carguen */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-6 sm:p-8">
+
+    <!-- Sección 1: Wireframe -->
+    <section class="mb-12">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">1. Wireframe (Boceto Inicial)</h1>
+        <div class="bg-white p-6 rounded-xl shadow-lg flex justify-center">
+            <!-- Imagen del wireframe - CORREGIDO: Se usa un placeholder seguro (https) para evitar errores de contenido mixto -->
+            <img src="images/wireframe2.png" alt="Wireframe del dashboard dibujado en un cuaderno" class="rounded-lg shadow-md" style="max-width: 800px; width: 100%;" onerror="this.alt='Error al cargar la imagen del wireframe.'; this.src='https://placehold.co/800x600/f8f8f8/666?text=Error';">
+        </div>
+    </section>
+
+    <!-- Sección 2: Mockup Interactivo -->
+    <section>
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">2. Mockup (Prototipo Interactivo)</h1>
+
+        <!-- Título Secundario del Mockup --><header class="mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Dashboard de Experiencia del Cliente</h2>
+            <p class="text-gray-600">Mockup de métricas clave (Q3 2025)</p>
+        </header>
+
+        <!-- Contenedor principal de los gráficos (Grid 2x2) --><main class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            <!-- Visual 1: Satisfacción de Cliente por Departamento --><article class="bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">1. Satisfacción de Cliente por Departamento</h2>
+                <div class="h-96">
+                    <!-- El canvas donde se dibujará el gráfico --><canvas id="satisfaccionChart"></canvas>
+                </div>
+            </article>
+
+            <!-- Visual 2: Lealtad del Cliente (NPS) --><article class="bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">2. Lealtad del Cliente (NPS)</h2>
+                <!-- Usamos un contenedor relativo para centrar el score del NPS --><div class="h-96 relative flex items-center justify-center">
+                    <canvas id="npsChart" class="max-h-full max-w-full"></canvas>
+                    <!-- Etiqueta para el score central del NPS --><div classs="absolute" style="position: absolute; text-align: center;">
+                        <span class="text-gray-500 text-lg">NPS Score</span>
+                        <div class="text-5xl font-bold text-gray-800">45</div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Visual 3: Uso de Canales Digitales por Departamento --><article class="bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">3. Uso de Canales Digitales por Depto.</h2>
+                <div class="h-96">
+                    <canvas id="canalesChart"></canvas>
+                </div>
+            </article>
+
+            <!-- Visual 4: Dispersión (Edad / Satisfacción / Valor Mensual) --><article class="bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4">4. Dispersión: Edad, Satisfacción y Valor Mensual</h2>
+                <div class="h-96">
+                    <canvas id="bubbleChart"></canvas>
+                </div>
+            </article>
+
+        </main>
+    </section>
+
+    <!-- Script para inicializar los gráficos --><script>
+        // Registrar el plugin de etiquetas de datos globalmente
+        Chart.register(ChartDataLabels);
+        Chart.defaults.font.family = 'Inter';
+        Chart.defaults.plugins.datalabels.color = '#fff';
+        Chart.defaults.plugins.datalabels.font = { weight: 'bold' };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- GRÁFICO 1: SATISFACCIÓN (Barras Horizontales) ---
+            const ctx1 = document.getElementById('satisfaccionChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['BOGOTA', 'ANTIOQUIA', 'ATLANTICO', 'VALLE DEL CAUCA', 'BOLIVAR', 'SANTANDER', 'BOYACA', 'CUNDINAMARCA'],
+                    datasets: [{
+                        label: 'Satisfacción',
+                        // Datos ordenados de mayor a menor
+                        data: [5980, 3610, 1420, 1150, 1120, 780, 550, 410],
+                        backgroundColor: '#3b82f6', // Azul
+                        borderColor: '#3b82f6',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Eje Y horizontal
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false // Ocultamos la leyenda (redundante)
+                        },
+                        title: {
+                            display: false // Ya tenemos un título en el <article>
+                        },
+                        datalabels: {
+                            color: '#1f2937', // Color oscuro para las etiquetas
+                            anchor: 'end',
+                            align: 'end',
+                            padding: { right: 4 },
+                            font: { size: 12, weight: '500' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: false, // Ocultamos el eje X
+                            grid: { display: false },
+                            beginAtZero: true
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: {
+                                color: '#374151', // Color de etiquetas de departamento
+                                font: { size: 12 }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // --- GRÁFICO 2: NPS (Anillo) ---
+            const ctx2 = document.getElementById('npsChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Promotores (9-10)', 'Pasivos (7-8)', 'Detractores (0-6)'],
+                    datasets: [{
+                        data: [55, 20, 25], // Datos de ejemplo (NPS = 55-25 = 30)
+                        // Colores estándar de NPS
+                        backgroundColor: [
+                            '#16a34a', // Verde (Promotores)
+                            '#facc15', // Amarillo (Pasivos)
+                            '#dc2626'  // Rojo (Detractores)
+                        ],
+                        borderColor: '#fff',
+                        borderWidth: 4,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%', // Controla el grosor del anillo
+                    plugins: {
+                        legend: {
+                            position: 'bottom', // Leyenda abajo
+                            labels: {
+                                color: '#4b5563',
+                                padding: 20,
+                                font: { size: 12 }
+                            }
+                        },
+                        datalabels: {
+                            formatter: (value, ctx) => {
+                                return value + '%'; // Mostrar porcentaje
+                            },
+                            font: { size: 14 }
+                        }
+                    }
+                }
+            });
+
+            // --- GRÁFICO 3: CANALES (Barras Apiladas Verticales) ---
+            const ctx3 = document.getElementById('canalesChart').getContext('2d');
+            new Chart(ctx3, {
+                type: 'bar',
+                data: {
+                    labels: ['BOGOTA', 'ANTIOQUIA', 'VALLE DEL CAUCA', 'ATLANTICO', 'SANTANDER'],
+                    datasets: [
+                        {
+                            label: 'Web',
+                            data: [1200, 900, 400, 300, 250],
+                            backgroundColor: '#3b82f6', // Azul
+                        },
+                        {
+                            label: 'App Móvil',
+                            data: [800, 1100, 300, 200, 150],
+                            backgroundColor: '#16a34a', // Verde
+                        },
+                        {
+                            label: 'Chatbot',
+                            data: [300, 400, 100, 50, 100],
+                            backgroundColor: '#f97316', // Naranja
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#4b5563',
+                                padding: 20,
+                                font: { size: 12 }
+                            }
+                        },
+                        datalabels: {
+                            display: false // Desactivado (demasiado ruido en apiladas)
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true, // Apilar eje X
+                            grid: { display: false },
+                            ticks: { color: '#374151' }
+                        },
+                        y: {
+                            stacked: true, // Apilar eje Y
+                            beginAtZero: true,
+                            grid: { 
+                                color: '#e5e7eb', // Líneas de cuadrícula suaves
+                                drawBorder: false 
+                            },
+                            ticks: { color: '#374151' }
+                        }
+                    }
+                }
+            });
+
+            // --- GRÁFICO 4: BUBBLE CHART (Edad / Satisfacción / Valor Mensual) ---
+            // Generar datos aleatorios para el gráfico de burbujas
+            const bubbleData = [];
+            for (let i = 0; i < 50; i++) {
+                bubbleData.push({
+                    x: Math.floor(Math.random() * 50) + 18, // Edad (18-68)
+                    y: (Math.random() * 4) + 1, // Satisfacción (1.0 - 5.0)
+                    r: (Math.random() * 20) + 5 // Radio de la burbuja (Valor Mensual: 5-25 para visualización)
+                });
+            }
+
+            const ctx4 = document.getElementById('bubbleChart').getContext('2d');
+            new Chart(ctx4, {
+                type: 'bubble', // CAMBIADO A TIPO BUBBLE
+                data: {
+                    datasets: [{
+                        label: 'Clientes',
+                        data: bubbleData,
+                        backgroundColor: 'rgba(59, 130, 246, 0.6)', // Azul semi-transparente
+                        borderColor: 'rgba(59, 130, 246, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        datalabels: {
+                            display: false // Desactivado
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = ` Edad: ${context.parsed.x}`;
+                                    label += `, Satis.: ${context.parsed.y.toFixed(1)}`;
+                                    label += `, Valor Mensual: ${context.raw.r.toFixed(0)} USD`; // Mostrar el valor del radio
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Edad del Cliente',
+                                color: '#4b5563',
+                                font: { size: 14 }
+                            },
+                            grid: { color: '#e5e7eb' },
+                            ticks: { color: '#374151' }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Satisfacción de Llamada (1-5)',
+                                color: '#4b5563',
+                                font: { size: 14 }
+                            },
+                            grid: { color: '#e5e7eb' },
+                            ticks: { color: '#374151', stepSize: 1 } // Paso de 1 para la satisfacción
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

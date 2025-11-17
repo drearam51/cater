@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título de la página -->
+    <title>Cater Premier 2011</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/logo_cater.png">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fuente Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Fondo negro con un sutil patrón de ruido para textura */
+            background-color: #000000;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0.0 0.0 4.0 4.0'%3E%3Crect width='4' height='4' fill='%23111111'/%3E%3Cpath d='M0 0L4 4ZM4 0L0 4Z' stroke-width='1' stroke='%23222222'/%3E%3C/svg%3E");
+        }
+        /* Estilo para las tarjetas de canciones */
+        .song-card {
+            background-color: #1a1a1a;
+            border: 2px solid #facc15; /* Borde amarillo */
+            border-radius: 1rem;
+            box-shadow: 0 10px 20px rgba(250, 204, 21, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Asegura que las tarjetas tengan la misma altura */
+        }
+        .song-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(250, 204, 21, 0.2);
+        }
+        /* Contenedor de la letra con scroll si es necesario */
+        .lyrics-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            max-height: 400px; /* Altura máxima antes de scrollear */
+        }
+        /* Estilo para la barra de scroll */
+        .lyrics-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .lyrics-content::-webkit-scrollbar-track {
+            background: #2a2a2a;
+            border-radius: 10px;
+        }
+        .lyrics-content::-webkit-scrollbar-thumb {
+            background-color: #facc15;
+            border-radius: 10px;
+            border: 2px solid #2a2a2a;
+        }
+    </style>
+</head>
+<body class="text-gray-200">
+
+    <!-- Contenedor principal -->
+    <div class="container mx-auto px-4 py-12">
+
+        <!-- Encabezado con logo y título -->
+        <header class="text-center mb-16">
+            <img src="images/logo_cater.png" alt="Logo Cater Premier" class="mx-auto h-32 w-32 mb-4">
+            <h1 class="text-5xl md:text-6xl font-black text-yellow-400" style="text-shadow: 0 0 10px rgba(250, 204, 21, 0.5);">
+                CATER PREMIER 2011
+            </h1>
+            <p class="text-xl text-gray-400 mt-2">¡La hinchada que nunca abandona!</p>
+        </header>
+
+        <!-- Sección de Foto del Equipo -->
+        <section class="mb-16">
+            <h2 class="text-4xl font-bold text-center text-yellow-400 mb-8">Nuestros Campeones</h2>
+            <div class="max-w-4xl mx-auto bg-gray-900 border-4 border-dashed border-yellow-400 rounded-2xl p-8 h-96 flex items-center justify-center">
+                <span class="text-2xl text-gray-500 font-semibold"> <img src="images/equipo_cater.jpg" alt="equipo_cater"> </span>
+            </div>
+            <p class="text-center text-gray-400 mt-4 italic">¡El equipo que nos llena de orgullo!</p>
+        </section>
+
+        <!-- Sección de Canciones -->
+        <section>
+            <h2 class="text-4xl font-bold text-center text-yellow-400 mb-12">Cantos de la Hinchada</h2>
+            <!-- Grid para las canciones -->
+            <div id="songs-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Las tarjetas de canciones se insertarán aquí dinámicamente -->
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center p-8 mt-16 border-t border-gray-800">
+        <p class="text-gray-500">&copy; 2011 - Cater Premier. Hecho con pasión.</p>
+    </footer>
+
+    <script>
+        // Datos de las canciones
+        const songs = [
+            {
+                number: "1",
+                title: "Cater de mi vida",
+                lyrics: `Cater, Cater de mi vida
+Dame una alegría, quiero ser campeón
+Sabes, todo lo que siento
+Yo te llevo dentro, de mi corazón
+(bis)`
+            },
+            {
+                number: "2",
+                title: "Llevo con orgullo",
+                lyrics: `Llevo con orgullo esta camiseta
+No importa que ganes, no importa que pierdas
+Yo dejo la vida por verte campeón
+Caterpillar motor por esta pasión.
+(bis)`
+            },
+            {
+                number: "3",
+                title: "Poropopo",
+                lyrics: `Poropopo, poropopo
+El que no salte no es de Cater campeón.
+(bis-02)`
+            },
+            {
+                number: "6",
+                title: "Hoy hay que ganar",
+                lyrics: `Si señor, a Cater cada vez lo quiero más
+Por eso lo sigo a donde va
+Esos niños son mis guerreros
+Los aurinegros
+Si señor, esta barra siempre va a alentar
+Noventa minutos y mucho más
+Esta barra es la que te canta
+La del aguante
+
+Coro
+
+Hoy, hay que ganar
+Que esta barra es un carnaval
+La que siempre te está alentando
+
+Hoy, hay que ganar
+Que la vuelta queremos dar
+Y en la buena y la mala estamos. 
+(bis)`
+            },
+            {
+                number: "7",
+                title: "Oh mama",
+                lyrics: `Oh mama, mama, mama
+Oh mama, mama, mama
+¿Sabés por qué me late el corazón?
+He visto a Caterpillar tocando la pecosa
+Eh, mamá enamorado estoy.
+(bis-2)`
+            },
+            {
+                number: "13",
+                title: "Se me parte el corazón",
+                lyrics: `Los momentos que viví
+Todo lo que yo dejé
+Por seguir a Caterpillar
+Nadie lo puede entender
+
+Yo no sé cómo explicar
+Que te llevo hasta en la piel
+Sos la fuerza que en las venas
+Me inyectaron al nacer
+
+Se me parte el corazón
+Cada vez que vos perdés
+Me pongo de la cabeza
+Y otra vez te vengo a ver
+
+Muchachos, traigan bombos juega Cater
+Que esta banda está de fiesta
+Y hoy no podemos perder
+
+Muchachos, traigan bombos juega Cater
+Estamos locos más que locos
+Por la copa retener
+(bis)`
+            },
+            {
+                number: "14",
+                title: "Soy del aurinegro",
+                lyrics: `Señores yo soy del aurinegro
+A Cater lo sigo a donde va
+No importa, aunque ganes o pierdas
+Tu gente siempre te va a alentar
+
+Coro
+
+Vamos, vamos mi Cater
+Ponga garra y corazón
+Que esta hinchada se merece ser campeón
+
+En las buenas vamo’ a estar
+En las malas mucho más
+Esta hinchada nunca te va a abandonar`
+            },
+            {
+                number: "16",
+                title: "Vamos Cater",
+                lyrics: `Oh… vamos, vamos Cater
+Vamos, vamos Cater
+Vamos, vamos Cater eeee
+
+Oh... vamos, vamos Cater
+Vamos, vamos Cater
+Vamos, vamos Cater eeee`
+            },
+            {
+                number: "17",
+                title: "Mi buen amigo",
+                lyrics: `No me importa lo que digan
+Lo que digan los demás
+Yo te sigo a todas partes
+Cada vez te quiero más
+1,2,3 Caterpillar, mi buen amigo
+Este torneo volveremo’ a estar contigo
+Te alentaremos de corazón
+Esta es tu hinchada que te quiere ver campeón`
+            },
+            {
+                number: "20",
+                title: "Caterpillar del Corazón",
+                lyrics: `Todas las jugadas que te vi
+Todas las canchas donde te seguí
+Cada campeonato que ganamos
+La copa que levantamos cuando fuimos a Brasil
+
+Los entrenos en el club
+Siempre en lo oscuro tú has sido mi luz
+Este sentimiento de pasión
+El sacrificio que tú haces para salir campeón
+
+Coro
+
+Cater sos mi alegría
+Vos sos el campeón
+Por ti dejo la vida
+Caterpillar del corazón
+(Bis coro) (bis todo)`
+            },
+            {
+                number: "22",
+                title: "Te quiero más",
+                lyrics: `Vamos, vamos Caterpillar hay que ganar
+Que tu hinchada nunca te deja de alentar
+Yo te sigo a todas partes por donde vas
+Cada vez te quiero más 
+(bis-3)`
+            },
+            {
+                number: "23",
+                title: "Una promesa llevo",
+                lyrics: `Me lo dijo el profe Cesar
+Lo dijo Jorge también
+Caterpillar a la cancha
+Siempre sale a vencer
+
+Lo dijo el profe Camelo
+Y lo dijo con razón
+En la cancha pongan huevo
+Alma, vida y corazón.
+
+Coro
+Una promesa llevo aquí en el alma
+De que mi Caterpillar va a ser campeón
+Vamos profe Camelo juegue sus cartas
+Que esta hinchada confía en su dirección
+(bis)`
+            },
+            {
+                number: "24",
+                title: "Te quiero campeón",
+                lyrics: `Vamos Caterpillar
+A ganar la copa
+Tu barra tiene aguante
+Siempre está contigo donde quiera que te toca (bis)
+
+Coro
+Como te quiero, te quiero campeón
+Como te amo con loca pasión
+Vos sos mi vida, vos sos mi ilusión
+Te llevo tatuado dentro de mi corazón`
+            },
+            {
+                number: "26",
+                title: "Huele a gol",
+                lyrics: `Te vengo a ver
+No importará prestar mi voz
+Todo por verte campeón
+Porque si estás aquí huele a gol, huele a gol, huele a gol
+Te vengo a ver
+Y se acelera el corazón
+Por llevar puesto tu color
+Porque si estás aquí huele a gol, huele a gol, huele a gol
+(bis)`
+            }
+        ];
+
+        // Función para renderizar las canciones
+        function renderSongs() {
+            const grid = document.getElementById('songs-grid');
+            grid.innerHTML = ''; // Limpiar el grid
+
+            songs.forEach(song => {
+                // Crear la tarjeta
+                const card = document.createElement('div');
+                card.className = 'song-card';
+
+                // Crear el contenido de la tarjeta
+                card.innerHTML = `
+                    <!-- Número resaltado -->
+                    <div class="relative p-4">
+                        <span class="absolute top-0 left-0 -mt-5 -ml-2 bg-yellow-400 text-black text-3xl font-black w-16 h-16 flex items-center justify-center rounded-full shadow-lg" style="text-shadow: none;">
+                            ${song.number}
+                        </span>
+                    </div>
+                    
+                    <!-- Título -->
+                    <h3 class="text-2xl font-bold text-yellow-400 px-6 pt-12 text-center">
+                        ${song.title}
+                    </h3>
+                    
+                    <!-- Letra (con <pre> para respetar saltos de línea) -->
+                    <div class="lyrics-content p-6">
+                        <pre class="text-gray-300 whitespace-pre-wrap text-lg leading-relaxed">
+${song.lyrics}
+                        </pre>
+                    </div>
+                `;
+
+                // Añadir la tarjeta al grid
+                grid.appendChild(card);
+            });
+        }
+
+        // Renderizar las canciones cuando se cargue la página
+        document.addEventListener('DOMContentLoaded', renderSongs);
+    </script>
+
+</body>
+</html>
